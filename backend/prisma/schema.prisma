@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "ERD"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./diagrams"
+  format   = "svg" // Puedes cambiar el formato a 'png' o 'svg'
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  nombreCompleto String
+  usuario        String     @unique
+  password       String
+  Edad           Int
+  incident       incident[]
+}
+
+model incident {
+  id               Int      @id @default(autoincrement())
+  NombreCiudad     String
+  NombreIncidencia String
+  IconoIncident    String
+  fotoLugar        String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User?    @relation(fields: [userId], references: [id])
+  userId           Int
+}
